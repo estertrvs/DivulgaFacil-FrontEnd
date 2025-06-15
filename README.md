@@ -153,7 +153,7 @@ src
       <a href="https://github.com/KesleyWilie" title="GitHub">
         <img src="https://avatars.githubusercontent.com/u/144160126?v=4" width="100px;" alt="Foto de Kesley"/><br>
         <sub>
-          <b>Otávio Estendio</b>
+          <b>Kesley Wilie</b>
         </sub>
       </a>
     </td>
