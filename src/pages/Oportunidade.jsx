@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { listarOportunidades, criarOportunidade } from "../services/oportunidadeService";
 
 function Oportunidade() {
@@ -7,6 +8,17 @@ function Oportunidade() {
   const [descricao, setDescricao] = useState("");
   const [dataValidade, setDataValidade] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      carregarOportunidades();
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   // Função para buscar as oportunidades na API
   const carregarOportunidades = () => {
@@ -18,11 +30,6 @@ function Oportunidade() {
         console.error("Erro ao buscar oportunidades:", error);
       });
   };
-
-  // Executa quando o componente é montado
-  useEffect(() => {
-    carregarOportunidades();
-  }, []);
 
   // Função para criar uma nova oportunidade
   const handleSubmit = (e) => {
@@ -47,6 +54,15 @@ function Oportunidade() {
         console.error("Erro ao criar oportunidade:", error);
       });
   };
+
+  if (!isLoggedIn) {
+    return (
+      <div>
+        <h1>Oportunidades</h1>
+        <p>Você não está logado. <Link to="/login">Clique aqui para fazer login.</Link></p>
+      </div>
+    );
+  }
 
   return (
     <div>

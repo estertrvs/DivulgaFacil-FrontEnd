@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { listarCategorias, criarCategoria } from "../services/categoriaService";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
   const [nome, setNome] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      carregarCategorias();
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   const carregarCategorias = () => {
     listarCategorias()
@@ -14,10 +26,6 @@ function Categorias() {
         console.error("Erro ao buscar categorias:", error);
       });
   };
-
-  useEffect(() => {
-    carregarCategorias();
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +43,15 @@ function Categorias() {
         console.error("Erro ao criar categoria:", error);
       });
   };
+
+  if (!isLoggedIn) {
+    return (
+      <div>
+        <h1>Categorias</h1>
+        <p>Você não está logado. <Link to="/login">Clique aqui para fazer login.</Link></p>
+      </div>
+    );
+  }
 
   return (
     <div>
