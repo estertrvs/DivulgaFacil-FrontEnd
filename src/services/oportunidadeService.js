@@ -1,10 +1,15 @@
 import api from "./api";
 
-export async function listarOportunidades() {
-  return api.get("/oportunidades");
-}
+export const listarOportunidades = () => api.get("/oportunidades");
 
-export async function criarOportunidade(data) {
-  return api.post("/oportunidades", data);
-}
+export const criarOportunidade = (dados) =>
+  api.post("/oportunidades", dados);
 
+export const atualizarOportunidade = (id, dados) =>
+  api.put(`/oportunidades/${id}`, dados);
+
+export const buscarOportunidadePorId = (id) =>
+  api.get(`/oportunidades/${id}`);
+
+export const deletarOportunidade = (id) =>
+  api.delete(`/oportunidades/${id}`);
