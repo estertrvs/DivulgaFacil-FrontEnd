@@ -17,8 +17,8 @@ function Oportunidade() {
   const [editandoId, setEditandoId] = useState(null);
   const [categorias, setCategorias] = useState([]);
 
+  const [idParaExcluir, setIdParaExcluir] = useState(null); 
   const navigate = useNavigate();
-
   const isLoggedIn = localStorage.getItem("token") !== null;
 
   useEffect(() => {
@@ -30,7 +30,6 @@ function Oportunidade() {
     }
   }, []);
 
-
   const carregarOportunidades = () => {
     listarOportunidades()
       .then((res) => setOportunidades(res.data))
@@ -40,12 +39,7 @@ function Oportunidade() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const dados = {
-      titulo,
-      descricao,
-      dataValidade,
-      categoriaId,
-    };
+    const dados = { titulo, descricao, dataValidade, categoriaId };
 
     const acao = editandoId
       ? atualizarOportunidade(editandoId, dados)
@@ -67,12 +61,12 @@ function Oportunidade() {
     navigate(`/oportunidades/editar/${id}`);
   };
 
-  const handleDeletar = (id) => {
-    const confirmacao = window.confirm("Deseja realmente excluir esta oportunidade?");
-    if (!confirmacao) return;
-
-    deletarOportunidade(id)
-      .then(() => carregarOportunidades())
+  const confirmarExclusao = () => {
+    deletarOportunidade(idParaExcluir)
+      .then(() => {
+        carregarOportunidades();
+        setIdParaExcluir(null); 
+      })
       .catch((err) => console.error("Erro ao excluir:", err));
   };
 
@@ -80,28 +74,88 @@ function Oportunidade() {
     return (
       <div>
         <h1>Oportunidades</h1>
-        <p>Você não está logado. <Link to="/login">Clique aqui para fazer login.</Link></p>
+        <p>
+          Você não está logado.{" "}
+          <Link to="/login">Clique aqui para fazer login.</Link>
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="container mt-4">
       <h1>Oportunidades</h1>
-      <button onClick={() => navigate("/oportunidades/cadastrar")}>
+      <button
+        className="btn btn-primary mb-3"
+        onClick={() => navigate("/oportunidades/cadastrar")}
+      >
         Cadastrar Oportunidade
       </button>
+
       <h2>Lista de Oportunidades</h2>
-      <ul>
+      <ul className="list-group">
         {oportunidades.map((o) => (
-          <li key={o.id}>
-            <strong>{o.titulo}</strong>: {o.descricao} — Validade: {o.dataValidade}
-            <br />
-            <button onClick={() => handleEditar(o.id)}>Editar</button>
-            <button onClick={() => handleDeletar(o.id)}>Excluir</button>
+          <li key={o.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{o.titulo}</strong>: {o.descricao} — Validade: {o.dataValidade}
+            </div>
+            <div>
+              <button
+                className="btn btn-warning btn-sm me-2"
+                onClick={() => handleEditar(o.id)}
+              >
+                Editar
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => setIdParaExcluir(o.id)} 
+              >
+                Excluir
+              </button>
+            </div>
           </li>
         ))}
       </ul>
+
+      {idParaExcluir !== null && (
+        <div className="modal show fade d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirmar Exclusão</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setIdParaExcluir(null)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>Deseja realmente excluir esta oportunidade?</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setIdParaExcluir(null)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={confirmarExclusao}
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Link to="/" className="btn btn-secondary ms-2">
+        Voltar
+      </Link>
     </div>
   );
 }

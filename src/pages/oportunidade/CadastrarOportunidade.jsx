@@ -10,6 +10,8 @@ function CadastrarOportunidade() {
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState([]);
 
+  const [mensagem, setMensagem] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,46 +32,65 @@ function CadastrarOportunidade() {
 
     criarOportunidade(dados)
       .then(() => {
-        alert("Oportunidade cadastrada com sucesso!");
-        navigate("/oportunidades");
+        setMensagem("Oportunidade cadastrada com sucesso!");
+        setTimeout(() => {
+          navigate("/oportunidades");
+        }, 2000);
       })
-      .catch((err) => console.error("Erro ao cadastrar:", err));
+      .catch((err) => {
+        console.error("Erro ao cadastrar:", err);
+        setMensagem("Erro ao cadastrar oportunidade.");
+      });
   };
 
   return (
-    <div>
-      <h1>Cadastrar Oportunidade</h1>
+    <div className="container mt-5">
+      <h2 className="mb-4">Cadastrar Oportunidade</h2>
+
+      {mensagem && (
+        <div className="alert alert-info" role="alert">
+          {mensagem}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Título:</label>
+        <div className="mb-3">
+          <label className="form-label">Título:</label>
           <input
             type="text"
+            className="form-control"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Descrição:</label>
+
+        <div className="mb-3">
+          <label className="form-label">Descrição:</label>
           <input
             type="text"
+            className="form-control"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Data de Validade:</label>
+
+        <div className="mb-3">
+          <label className="form-label">Data de Validade:</label>
           <input
             type="date"
+            className="form-control"
             value={dataValidade}
             onChange={(e) => setDataValidade(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Categoria:</label>
+
+        <div className="mb-4">
+          <label className="form-label">Categoria:</label>
           <select
+            className="form-select"
             value={categoriaId}
             onChange={(e) => setCategoriaId(parseInt(e.target.value))}
             required
@@ -82,11 +103,14 @@ function CadastrarOportunidade() {
             ))}
           </select>
         </div>
-        <button type="submit">Cadastrar</button>
-      </form>
 
-      <br />
-      <Link to="/oportunidades">← Voltar para Oportunidades</Link>
+        <button type="submit" className="btn btn-primary">
+          Cadastrar
+        </button>
+        <Link to="/oportunidades" className="btn btn-secondary ms-2">
+          Voltar
+        </Link>
+      </form>
     </div>
   );
 }
