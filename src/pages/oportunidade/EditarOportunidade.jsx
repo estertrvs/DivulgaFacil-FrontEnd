@@ -4,7 +4,7 @@ import { buscarOportunidadePorId, atualizarOportunidade } from "../../services/o
 import { listarCategorias } from "../../services/categoriaService";
 
 function EditarOportunidade() {
-  const { id } = useParams("");
+  const { id } = useParams();
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataValidade, setDataValidade] = useState("");
@@ -14,26 +14,27 @@ function EditarOportunidade() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    buscarOportunidadePorId(id)
-      .then((res) => {
-        const o = res.data;
-        setTitulo(o.titulo);
-        setDescricao(o.descricao);
-        setDataValidade(o.dataValidade);
-        setCategoriaId(o.categoriaId); 
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar oportunidade:", err);
-        alert("Erro ao buscar dados da oportunidade.");
-        navigate("/oportunidades");
-      });
-
     listarCategorias()
       .then((res) => {
         setCategorias(res.data);
       })
       .catch((err) => {
         console.error("Erro ao listar categorias:", err);
+        alert("Erro ao carregar categorias.");
+      });
+
+    buscarOportunidadePorId(id)
+      .then((res) => {
+        const o = res.data;
+        setTitulo(o.titulo);
+        setDescricao(o.descricao);
+        setDataValidade(o.dataValidade);
+        setCategoriaId(o.categoriaId || ""); 
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar oportunidade:", err);
+        alert("Erro ao buscar dados da oportunidade.");
+        navigate("/oportunidades");
       });
   }, [id, navigate]);
 
