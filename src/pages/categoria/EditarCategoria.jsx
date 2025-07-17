@@ -1,42 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { buscarCategoriaPorId, atualizarCategoria } from "../../services/categoriaService";
-import { listarCategorias } from "../../services/categoriaService";
 
 function EditarCategoria() {
-  const { id } = useParams("");
+  const { id } = useParams();
   const [nome, setNome] = useState("");
-
   const navigate = useNavigate();
 
   useEffect(() => {
     buscarCategoriaPorId(id)
       .then((res) => {
-        const o = res.data;
-        setNome(o.nome);
+        const categoria = res.data;
+        setNome(categoria.nome);
       })
       .catch((err) => {
         console.error("Erro ao buscar categoria:", err);
         alert("Erro ao buscar dados da categoria.");
         navigate("/categorias");
       });
-
-    listarCategorias()
-      .then((res) => {
-        setCategoriaId(res.data);
-      })
-      .catch((err) => {
-        console.error("Erro ao listar categorias:", err);
-      });
   }, [id, navigate]);
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const dados = {
-      nome
-    };
+    const dados = { nome };
 
     atualizarCategoria(id, dados)
       .then(() => {
