@@ -1,0 +1,78 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { buscarCategoriaPorId, atualizarCategoria } from "../../services/categoriaService";
+import { listarCategorias } from "../../services/categoriaService";
+
+function EditarCategoria() {
+  const { id } = useParams("");
+  const [nome, setNome] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    buscarCategoriaPorId(id)
+      .then((res) => {
+        const o = res.data;
+        setNome(o.nome);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar categoria:", err);
+        alert("Erro ao buscar dados da categoria.");
+        navigate("/categorias");
+      });
+
+    listarCategorias()
+      .then((res) => {
+        setCategoriaId(res.data);
+      })
+      .catch((err) => {
+        console.error("Erro ao listar categorias:", err);
+      });
+  }, [id, navigate]);
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const dados = {
+      nome
+    };
+
+    atualizarCategoria(id, dados)
+      .then(() => {
+        alert("Categoria atualizada com sucesso!");
+        navigate("/categorias");
+      })
+      .catch((err) => {
+        console.error("Erro ao atualizar:", err);
+        alert("Erro ao atualizar a categoria.");
+      });
+  };
+
+  return (
+    <div>
+      <h1>Editar Categoria</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>ID (não editável):</label>
+          <input type="text" value={id} disabled />
+        </div>
+        <div>
+          <label>Nome:</label>
+          <input
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Salvar Alterações</button>
+      </form>
+
+      <br />
+      <Link to="/categorias">← Voltar para Categorias</Link>
+    </div>
+  );
+}
+
+export default EditarCategoria;
