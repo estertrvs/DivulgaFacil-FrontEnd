@@ -1,19 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  listarCategorias,
-  criarCategoria,
-  atualizarCategoria,
-  buscarCategoriaPorId,
-  deletarCategoria
-} from "../../services/categoriaService";
+import { listarCategorias, criarCategoria } from "../../services/categoriaService";
 
 function Categoria() {
   const [categorias, setCategorias] = useState([]);
   const [nome, setNome] = useState("");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [editandoId, setEditandoId] = useState(null);
-
   const navigate = useNavigate();
 
   const isLoggedIn = localStorage.getItem("token") !== null;
@@ -21,24 +12,19 @@ function Categoria() {
   useEffect(() => {
     if (isLoggedIn) {
       carregarCategorias();
-      listarCategorias()
-        .then((res) => setCategorias(res.data))
-        .catch((err) => console.error("Erro ao carregar categorias:", err));
     }
   }, []);
 
   const carregarCategorias = () => {
     listarCategorias()
-      .then((res) => setOportunidades(res.data))
+      .then((res) => setCategorias(res.data))
       .catch((err) => console.error("Erro ao carregar:", err));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const novaCategoria = {
-      nome: nome,
-    };
+    const novaCategoria = { nome };
 
     criarCategoria(novaCategoria)
       .then(() => {
@@ -86,5 +72,4 @@ function Categoria() {
   );
 }
 
-//taiwind
-export default Categorias;
+export default Categoria;
