@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Oportunidades from "../pages/oportunidade/Oportunidade";
+import CadastrarOportunidade from "../pages/oportunidade/CadastrarOportunidade";
 import EditarOportunidade from "../pages/oportunidade/EditarOportunidade";
 import Categorias from "../pages/Categoria";
 import Usuarios from "../pages/Usuario";
@@ -12,6 +13,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/oportunidades" element={<Oportunidades />} />
+        <Route path="/oportunidades/cadastrar" element={<CadastrarOportunidade />} />
         <Route path="/oportunidades/editar/:id" element={<EditarOportunidade />} />
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/usuarios" element={<Usuarios />} />

@@ -88,55 +88,9 @@ function Oportunidade() {
   return (
     <div>
       <h1>Oportunidades</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Título:</label>
-          <input
-            type="text"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Descrição:</label>
-          <input
-            type="text"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Data de Validade:</label>
-          <input
-            type="date"
-            value={dataValidade}
-            onChange={(e) => setDataValidade(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Categoria:</label>
-          <select
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(parseInt(e.target.value))}
-            required
-          >
-            <option value="">Selecione uma categoria</option>
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">
-          {editandoId ? "Atualizar Oportunidade" : "Cadastrar Oportunidade"}
-        </button>
-      </form>
-
+      <button onClick={() => navigate("/oportunidades/cadastrar")}>
+        Cadastrar Oportunidade
+      </button>
       <h2>Lista de Oportunidades</h2>
       <ul>
         {oportunidades.map((o) => (
