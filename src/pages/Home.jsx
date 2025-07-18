@@ -20,6 +20,7 @@ function Home() {
           <li><Link to="/oportunidades">Oportunidades</Link></li>
           <li><Link to="/categorias">Categorias</Link></li>
           <li><Link to="/usuarios">Usuários</Link></li>
+          {isLoggedIn && <li><Link to="/alunos">Alunos</Link></li>}
           {!isLoggedIn && <li><Link to="/login">Login</Link></li>}
         </ul>
       </nav>
