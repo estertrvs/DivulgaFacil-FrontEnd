@@ -1,9 +1,15 @@
 import api from "./api";
 
-export async function listarCategorias() {
-  return api.get("/categorias");
-}
+export const listarCategorias = () => api.get("/categorias")
 
-export async function criarCategoria(categoria) {
-  return api.post("/categorias", categoria);
-}
+export const criarCategoria = (dados) =>
+  api.post("/categorias", dados);
+
+export const atualizarCategoria = (id, dados) =>
+  api.put(`/categorias/${id}`, dados);
+
+export const buscarCategoriaPorId = (id) =>
+  api.get(`/categorias/${id}`);
+
+export const deletarCategoria = (id) =>
+  api.delete(`/categorias/${id}`);
