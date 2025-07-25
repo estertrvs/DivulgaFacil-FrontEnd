@@ -22,22 +22,18 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        
         <Route path="/oportunidades" element={<Oportunidades />} />
         <Route path="/oportunidades/cadastrar" element={<CadastrarOportunidade />} />
         <Route path="/oportunidades/editar/:id" element={<EditarOportunidade />} />
 
-       
         <Route path="/alunos" element={<Aluno />} />
         <Route path="/alunos/cadastrar" element={<CadastrarAluno />} />
         <Route path="/alunos/editar/:id" element={<EditarAluno />} />
 
-        
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/categorias/cadastrar" element={<CadastrarCategoria />} />
         <Route path="/categorias/editar/:id" element={<EditarCategoria />} />
 
-       
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/login" element={<Login />} />
       </Routes>
