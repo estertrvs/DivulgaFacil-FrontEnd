@@ -43,7 +43,8 @@ const Aluno = () => {
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            
+            <th>Curso</th>
+            <th>Período</th>
             <th>Ações</th>
           </tr>
         </thead>
