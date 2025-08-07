@@ -1,0 +1,19 @@
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-green-700 {
+  color: #2e7d32;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}

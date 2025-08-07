@@ -1,11 +1,14 @@
 import { useState } from "react";
 import api from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "../styles/Login.css";
 
 function Login() {
   const [identificador, setIdentificador] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +18,7 @@ function Login() {
         const token = response.data.token;
         localStorage.setItem("token", token);
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
+        login(token);
         navigate("/");
       })
       .catch((error) => {
@@ -25,29 +28,35 @@ function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="formulario-container">
+      <h2 className="text-2xl font-semibold mb-6 text-green-700 text-center">Login</h2>
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Identificador:</label>
-          <input
-            type="text"
-            value={identificador}
-            onChange={(e) => setIdentificador(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Senha:</label>
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Entrar</button>
+        <label className="formulario-label">Matrícula</label>
+        <input
+          type="text"
+          value={identificador}
+          onChange={(e) => setIdentificador(e.target.value)}
+          required
+        />
+
+        <label className="formulario-label">Senha</label>
+        <input
+          type="password"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+
+        <button type="submit" className="botao-criar">Entrar</button>
       </form>
+
+      <p className="mt-4 text-center">
+        Ainda não tem uma conta?{" "}
+        <Link to="/alunos/cadastrar" className="text-green-700 font-semibold hover:underline">
+          Cadastre-se
+        </Link>
+      </p>
     </div>
   );
 }
