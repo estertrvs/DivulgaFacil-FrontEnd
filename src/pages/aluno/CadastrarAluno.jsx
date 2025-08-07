@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { cadastrarAluno } from "../../services/alunoService";
 import { useNavigate } from "react-router-dom";
+import FormularioCadastro from "../../components/FormularioCadastro";
+import "../../styles/Aluno.css";
 
 const CadastrarAluno = () => {
   const navigate = useNavigate();
@@ -25,54 +27,51 @@ const CadastrarAluno = () => {
     }
   };
 
-  return (
-    <div>
-      <h2>Cadastrar Aluno</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nome:</label>
-          <input
-            type="text"
-            name="nome"
-            value={aluno.nome}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>E-mail:</label>
-          <input
-            type="email"
-            name="email"
-            value={aluno.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Matrícula:</label>
-          <input
-            type="text"
-            name="matricula"
-            value={aluno.matricula}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Senha:</label>
-          <input
-            type="password"
-            name="senha"
-            value={aluno.senha}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  const campos = [
+    { 
+      name: "nome", 
+      label: "Nome Completo",
+      placeholder: "Digite seu nome", 
+      value: aluno.nome, 
+      onChange: handleChange, 
+      required: true 
+    },
+    { 
+      name: "email", 
+      type: "email", 
+      label: "E-mail", 
+      placeholder: "exemplo@email.com", 
+      value: aluno.email, 
+      onChange: handleChange, 
+      required: true 
+    },
+    { 
+      name: "matricula", 
+      label: "Matrícula", 
+      placeholder: "Digite a matrícula", 
+      value: aluno.matricula, 
+      onChange: handleChange, 
+      required: true 
+    },
+    { 
+      name: "senha", 
+      type: "password", 
+      label: "Senha", 
+      placeholder: "Digite a senha", 
+      value: aluno.senha, 
+      onChange: handleChange, 
+      required: true 
+    }
+  ];
 
-        <button type="submit">Cadastrar</button>
-      </form>
-    </div>
+  return (
+     <FormularioCadastro
+      titulo="Cadastrar Aluno"
+      campos={campos}
+      onSubmit={handleSubmit}
+      botaoTexto="Cadastrar"
+      onVoltar={() => navigate("/alunos")}
+    />
   );
 };
 

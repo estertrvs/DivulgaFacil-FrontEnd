@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { buscarOportunidadePorId, atualizarOportunidade } from "../../services/oportunidadeService";
 import { listarCategorias } from "../../services/categoriaService";
+import "../../styles/Oportunidade.css";
 
 function EditarOportunidade() {
   const { id } = useParams();
@@ -67,8 +68,8 @@ function EditarOportunidade() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">Editar Oportunidade</h2>
+    <div className="container">
+      <h2>Editar Oportunidade</h2>
 
       {mensagem && (
         <div className={`alert alert-${tipoMensagem}`} role="alert">
@@ -77,48 +78,44 @@ function EditarOportunidade() {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">ID (não editável):</label>
-          <input type="text" className="form-control" value={id} disabled />
+        <div>
+          <label>ID (não editável):</label>
+          <input type="text" value={id} disabled />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Título:</label>
+        <div>
+          <label>Título:</label>
           <input
             type="text"
-            className="form-control"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Descrição:</label>
+        <div>
+          <label>Descrição:</label>
           <input
             type="text"
-            className="form-control"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Data de Validade:</label>
+        <div>
+          <label>Data de Validade:</label>
           <input
             type="date"
-            className="form-control"
             value={dataValidade}
             onChange={(e) => setDataValidade(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-4">
-          <label className="form-label">Categoria:</label>
+        <div>
+          <label>Categoria:</label>
           <select
-            className="form-select"
             value={categoriaId}
             onChange={(e) => setCategoriaId(parseInt(e.target.value))}
             required
@@ -132,8 +129,10 @@ function EditarOportunidade() {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary me-2">Salvar Alterações</button>
-        <Link to="/oportunidades" className="btn btn-secondary">Voltar</Link>
+        <div>
+          <button type="submit">Salvar Alterações</button>
+          <Link to="/oportunidades" className="button-link ms-2">Voltar</Link>
+        </div>
       </form>
     </div>
   );

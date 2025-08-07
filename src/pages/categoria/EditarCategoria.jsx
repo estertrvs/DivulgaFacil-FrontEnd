@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { buscarCategoriaPorId, atualizarCategoria } from "../../services/categoriaService";
+import "../../styles/Categoria.css";
 
 function EditarCategoria() {
   const { id } = useParams();
@@ -39,6 +40,7 @@ function EditarCategoria() {
   return (
     <div>
       <h1>Editar Categoria</h1>
+
       <form onSubmit={handleSubmit}>
         <div>
           <label>ID (não editável):</label>
@@ -56,16 +58,10 @@ function EditarCategoria() {
         <button type="submit">Salvar Alterações</button>
       </form>
 
-      <br />
-      <button
-        type="button"
-        onClick={() => navigate("/categorias")}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
+      <button type="button" onClick={() => navigate("/categorias")}>
         ← Voltar para Categorias
       </button>
-
-    </div> 
+    </div>
   );
 }
 

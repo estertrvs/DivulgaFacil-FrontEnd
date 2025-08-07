@@ -1,0 +1,164 @@
+/* Layout container */
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 2px solid #e2e2e2;
+  font-family: Arial, sans-serif;
+}
+
+/* Títulos */
+h1, h2 {
+  color: #2e7d32;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Botões principais */
+button,
+a.button-link {
+  padding: 10px 18px;
+  margin-top: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+button:hover,
+a.button-link:hover {
+  background-color: #388e3c;
+}
+
+/* Botões secundários */
+.btn-secondary {
+  background-color: #757575;
+}
+
+.btn-secondary:hover {
+  background-color: #616161;
+}
+
+/* Botões de ação */
+.btn-warning {
+  background-color: #fbc02d;
+  color: #333;
+}
+
+.btn-warning:hover {
+  background-color: #f9a825;
+}
+
+.btn-danger {
+  background-color: #e53935;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c62828;
+}
+
+/* Formulário */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+form input,
+form select {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Lista de oportunidades */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Alertas */
+.alert {
+  padding: 12px;
+  background-color: #d0f0d2;
+  color: #2e7d32;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.alert-danger {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+}
+
+.alert-info {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.modal-dialog {
+  max-width: 500px;
+  margin: 100px auto;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.btn-close {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  float: right;
+  cursor: pointer;
+}

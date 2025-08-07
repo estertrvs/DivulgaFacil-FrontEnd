@@ -1,44 +1,45 @@
-import { useNavigate, Link } from "react-router-dom"; // Navegação programática e links entre rotas
-import { criarCategoria } from "../../services/categoriaService"; // Função que realiza a requisição POST para criar categoria
-import { useState } from "react"; // Hook para manipular estado local do componente
+import { useNavigate, Link } from "react-router-dom"; 
+import { criarCategoria } from "../../services/categoriaService";
+import { useState } from "react";
+import "../../styles/Categoria.css";  
+import FormularioCadastro from "../../components/FormularioCadastro";
 
 function CadastrarCategoria() {
-  const [nome, setNome] = useState(""); // Estado para armazenar o nome da nova categoria
-  const navigate = useNavigate(); // Permite redirecionar o usuário após o cadastro
+  const [nome, setNome] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Evita o comportamento padrão de recarregar a página no submit
+    e.preventDefault();
 
-    const dados = { nome }; // Cria objeto com os dados que serão enviados para a API
+    const dados = { nome };
 
     criarCategoria(dados)
       .then(() => {
-        alert("Categoria cadastrada com sucesso!"); //C Confirmação visual
-        navigate("/categorias"); // Redireciona para a lista de categorias após sucesso
+        alert("Categoria cadastrada com sucesso!");
+        navigate("/categorias");
       })
-      .catch((err) => console.error("Erro ao cadastrar:", err)); // Exibe erro no console em caso de falha
+      .catch((err) => console.error("Erro ao cadastrar:", err));
   };
 
-  // Retorna o JSX que renderiza o formulário de cadastro, o botão de envio e o link para voltar à listagem
-  return (
-    <div>
-      <h1>Cadastrar Categoria</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nome:</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Cadastrar Categoria</button>
-      </form>
+  const campos = [
+    {
+      name: "nome",
+      label: "Nome da Categoria",
+      placeholder: "Digite o nome da categoria",
+      value: nome,
+      onChange: (e) => setNome(e.target.value),
+      required: true
+    }
+  ];
 
-      <br />
-      <Link to="/categorias">← Voltar para Categorias</Link>
-    </div>
+  return (
+    <FormularioCadastro
+      titulo="Cadastrar Categoria"
+      campos={campos}
+      onSubmit={handleSubmit}
+      botaoTexto="Cadastrar"
+      onVoltar={() => navigate("/categorias")}
+    />
   );
 }
 

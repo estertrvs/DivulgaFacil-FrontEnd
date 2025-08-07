@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { listarCategorias } from "../../services/categoriaService";
+import ConfirmacaoModal from "../../components/ConfirmacaoModal";
 import {
   listarOportunidades,
   criarOportunidade,
@@ -16,8 +17,8 @@ function Oportunidade() {
   const [categoriaId, setCategoriaId] = useState("");
   const [editandoId, setEditandoId] = useState(null);
   const [categorias, setCategorias] = useState([]);
+  const [idParaExcluir, setIdParaExcluir] = useState(null);
 
-  const [idParaExcluir, setIdParaExcluir] = useState(null); 
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("token") !== null;
 
@@ -65,95 +66,86 @@ function Oportunidade() {
     deletarOportunidade(idParaExcluir)
       .then(() => {
         carregarOportunidades();
-        setIdParaExcluir(null); 
+        setIdParaExcluir(null);
       })
       .catch((err) => console.error("Erro ao excluir:", err));
   };
 
   if (!isLoggedIn) {
     return (
-      <div>
-        <h1>Oportunidades</h1>
+      <div className="p-8">
+        <h1 className="text-2xl font-semibold mb-4">Oportunidades</h1>
         <p>
           Você não está logado.{" "}
-          <Link to="/login">Clique aqui para fazer login.</Link>
+          <Link to="/login" className="text-blue-600 underline">
+            Clique aqui para fazer login.
+          </Link>
         </p>
       </div>
     );
   }
 
   return (
-    <div className="container mt-4">
-      <h1>Oportunidades</h1>
+    <div className="p-8">
+      <h1 className="text-2xl font-semibold mb-4">Oportunidades</h1>
+
       <button
-        className="btn btn-primary mb-3"
         onClick={() => navigate("/oportunidades/cadastrar")}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
       >
         Cadastrar Oportunidade
       </button>
 
-      <h2>Lista de Oportunidades</h2>
-      <ul className="list-group">
-        {oportunidades.map((o) => (
-          <li key={o.id} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{o.titulo}</strong>: {o.descricao} — Validade: {o.dataValidade}
-            </div>
-            <div>
-              <button
-                className="btn btn-warning btn-sm me-2"
-                onClick={() => handleEditar(o.id)}
-              >
-                Editar
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => setIdParaExcluir(o.id)} 
-              >
-                Excluir
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <h2 className="text-xl font-semibold mb-2">Lista de Oportunidades</h2>
 
-      {idParaExcluir !== null && (
-        <div className="modal show fade d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirmar Exclusão</h5>
+      <table className="min-w-full border rounded overflow-hidden">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="px-4 py-2 border">ID</th>
+            <th className="px-4 py-2 border">Título</th>
+            <th className="px-4 py-2 border">Descrição</th>
+            <th className="px-4 py-2 border">Validade</th>
+            <th className="px-4 py-2 border">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {oportunidades.map((o) => (
+            <tr key={o.id} className="hover:bg-gray-100">
+              <td className="px-4 py-2 border">{o.id}</td>
+              <td className="px-4 py-2 border">{o.titulo}</td>
+              <td className="px-4 py-2 border">{o.descricao}</td>
+              <td className="px-4 py-2 border">{o.dataValidade}</td>
+              <td className="px-4 py-2 border space-x-2">
                 <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setIdParaExcluir(null)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>Deseja realmente excluir esta oportunidade?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setIdParaExcluir(null)}
+                  className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
+                  onClick={() => handleEditar(o.id)}
                 >
-                  Cancelar
+                  Editar
                 </button>
                 <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={confirmarExclusao}
+                  className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  onClick={() => setIdParaExcluir(o.id)}
                 >
                   Excluir
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-      <Link to="/" className="btn btn-secondary ms-2">
+      { idParaExcluir !== null && (
+        <ConfirmacaoModal
+          titulo="Confirmar Exclusão"
+          mensagem="Deseja realmente excluir esta oportunidade?"
+          onCancelar={() => setIdParaExcluir(null)}
+          onConfirmar={confirmarExclusao}
+        />
+      )}
+      <Link
+        to="/"
+        className="mt-6 inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+      >
         Voltar
       </Link>
     </div>
