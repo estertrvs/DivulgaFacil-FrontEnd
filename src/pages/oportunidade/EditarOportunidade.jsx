@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { buscarOportunidadePorId, atualizarOportunidade } from "../../services/oportunidadeService";
 import { listarCategorias } from "../../services/categoriaService";
 import "../../styles/Oportunidade.css";
+import FormularioCadastro from "../../components/FormularioCadastro";
 
 function EditarOportunidade() {
   const { id } = useParams();
@@ -67,6 +68,43 @@ function EditarOportunidade() {
       });
   };
 
+  const campos = [
+    {
+      name: "titulo",
+      label: "Título",
+      placeholder: "Digite o título da oportunidade",
+      value: titulo,
+      onChange: (e) => setTitulo(e.target.value),
+      required: true,
+    },
+    {
+      name: "descricao",
+      label: "Descrição",
+      placeholder: "Digite a descrição",
+      value: descricao,
+      onChange: (e) => setDescricao(e.target.value),
+      required: true,
+    },
+    {
+      name: "dataValidade",
+      label: "Data de validade",
+      type: "date",
+      value: dataValidade,
+      onChange: (e) => setDataValidade(e.target.value),
+      required: true,
+    },
+    {
+      name: "categoriaId",
+      label: "Categoria",
+      type: "select",
+      value: categoriaId,
+      onChange: (e) => setCategoriaId(parseInt(e.target.value)),
+      required: true,
+      options: categorias.map((c) => ({ value: c.id, label: c.nome })),
+      placeholder: "Selecione uma categoria",
+    },
+  ];
+
   return (
     <div className="container">
       <h2>Editar Oportunidade</h2>
@@ -77,63 +115,13 @@ function EditarOportunidade() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>ID (não editável):</label>
-          <input type="text" value={id} disabled />
-        </div>
-
-        <div>
-          <label>Título:</label>
-          <input
-            type="text"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Descrição:</label>
-          <input
-            type="text"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Data de Validade:</label>
-          <input
-            type="date"
-            value={dataValidade}
-            onChange={(e) => setDataValidade(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Categoria:</label>
-          <select
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(parseInt(e.target.value))}
-            required
-          >
-            <option value="">Selecione...</option>
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <button type="submit">Salvar Alterações</button>
-          <Link to="/oportunidades" className="button-link ms-2">Voltar</Link>
-        </div>
-      </form>
+      <FormularioCadastro
+        titulo="Editar Oportunidade"
+        campos={campos}
+        onSubmit={handleSubmit}
+        botaoTexto="Salvar Alterações"
+        onVoltar={() => navigate("/oportunidades")}
+      />
     </div>
   );
 }
