@@ -143,7 +143,9 @@ function Oportunidade() {
               <td className="px-4 py-2 border">{o.id}</td>
               <td className="px-4 py-2 border">{o.titulo}</td>
               <td className="px-4 py-2 border">{o.descricao}</td>
-              <td className="px-4 py-2 border">{o.dataValidade}</td>
+              <td className="px-4 py-2 border">
+                {o.dataValidade.split("-").reverse().join("/")}
+              </td>
               <td className="px-4 py-2 border space-x-2">
                 {tipoUsuario === "ADMIN" ? (
                   <>
