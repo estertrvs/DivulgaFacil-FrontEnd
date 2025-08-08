@@ -2,6 +2,9 @@ import api from "./api";
 
 export const listarOportunidades = () => api.get("/oportunidades");
 
+export const filtrarOportunidades = (params) =>
+  api.get("/oportunidades/filtrar", { params });
+
 export const criarOportunidade = (dados) =>
   api.post("/oportunidades", dados);
 

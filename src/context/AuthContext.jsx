@@ -8,25 +8,43 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const usuarioId = localStorage.getItem("usuarioId");
+    const tipo = localStorage.getItem("tipo");
+
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUsuario({ email: decoded.sub, role: decoded.role });
+        setUsuario({
+          email: decoded.sub,
+          role: decoded.role,
+          id: usuarioId,
+          tipo: tipo,
+        });
       } catch (err) {
         console.error("Token inválido", err);
-        setUsuario(null);
+        logout(); 
       }
     }
   }, []);
 
-  const login = (token) => {
+  const login = (token, usuarioId, tipo) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("usuarioId", usuarioId);
+    localStorage.setItem("tipo", tipo);
+
     const decoded = jwtDecode(token);
-    setUsuario({ email: decoded.sub, role: decoded.role });
+    setUsuario({
+      email: decoded.sub,
+      role: decoded.role,
+      id: usuarioId,
+      tipo: tipo,
+    });
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("usuarioId");
+    localStorage.removeItem("tipo");
     setUsuario(null);
   };
 

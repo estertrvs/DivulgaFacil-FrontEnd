@@ -20,11 +20,9 @@ function Login() {
         const decoded = jwtDecode(token);
         const usuarioId = decoded.id;
         const tipoUsuario = response.data.tipo;
-        localStorage.setItem("token", token);
-        localStorage.setItem("usuarioId", usuarioId);
-        localStorage.setItem("tipo", tipoUsuario)
+      
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        login(token);
+        login(token, usuarioId, tipoUsuario);
         navigate("/");
       })
       .catch((error) => {

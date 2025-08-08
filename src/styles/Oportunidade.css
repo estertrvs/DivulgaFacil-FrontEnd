@@ -1,6 +1,5 @@
-/* Layout container */
 .container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 30px;
   background-color: #f9f9f9;
@@ -9,14 +8,12 @@
   font-family: Arial, sans-serif;
 }
 
-/* Títulos */
 h1, h2 {
   color: #2e7d32;
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* Botões principais */
 button,
 a.button-link {
   padding: 10px 18px;
@@ -35,7 +32,6 @@ a.button-link:hover {
   background-color: #388e3c;
 }
 
-/* Botões secundários */
 .btn-secondary {
   background-color: #757575;
 }
@@ -44,7 +40,6 @@ a.button-link:hover {
   background-color: #616161;
 }
 
-/* Botões de ação */
 .btn-warning {
   background-color: #fbc02d;
   color: #333;
@@ -63,7 +58,6 @@ a.button-link:hover {
   background-color: #c62828;
 }
 
-/* Formulário */
 form {
   display: flex;
   flex-direction: column;
@@ -84,7 +78,6 @@ form select {
   font-size: 16px;
 }
 
-/* Lista de oportunidades */
 ul {
   list-style: none;
   padding: 0;
@@ -101,7 +94,6 @@ li {
   align-items: center;
 }
 
-/* Alertas */
 .alert {
   padding: 12px;
   background-color: #d0f0d2;
@@ -121,7 +113,6 @@ li {
   color: #0d47a1;
 }
 
-/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -161,4 +152,30 @@ li {
   font-size: 20px;
   float: right;
   cursor: pointer;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.filtros input,
+.filtros select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 180px;
+}
+
+.filtros input:focus,
+.filtros select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }

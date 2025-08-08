@@ -1,32 +1,46 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "../styles/Home.css"; // Crie esse arquivo se ainda não existir
 
 function Home() {
   const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("token") !== null;
+  const tipoUsuario = localStorage.getItem("tipo");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("tipo");
     navigate("/login");
   };
 
-  const isLoggedIn = localStorage.getItem("token") !== null;
-
   return (
-    <div>
-      <h1>DivulgaFácil</h1>
-      <p>Bem-vindo ao sistema de divulgação de oportunidades acadêmicas!</p>
+    <div className="container home-container">
+      <h1 className="home-title">DivulgaFácil</h1>
+      <p className="home-subtitle">Bem-vindo ao sistema de divulgação de oportunidades acadêmicas!</p>
 
-      <nav>
-        <ul>
-          <li><Link to="/oportunidades">Oportunidades</Link></li>
-          <li><Link to="/categorias">Categorias</Link></li>
-          <li><Link to="/usuarios">Usuários</Link></li>
-          {isLoggedIn && <li><Link to="/alunos">Alunos</Link></li>}
-          {!isLoggedIn && <li><Link to="/login">Login</Link></li>}
-        </ul>
-      </nav>
+      <div className="home-buttons">
+        <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
+          Ver Oportunidades
+        </button>
+
+        {isLoggedIn && tipoUsuario !== "ALUNO" && (
+          <>
+            <button className="btn-primary" onClick={() => navigate("/categorias")}>
+              Gerenciar Categorias
+            </button>
+            <button className="btn-primary" onClick={() => navigate("/usuarios")}>
+              Gerenciar Usuários
+            </button>
+            <button className="btn-primary" onClick={() => navigate("/alunos")}>
+              Ver Alunos
+            </button>
+          </>
+        )}
+      </div>
 
       {isLoggedIn && (
-        <button onClick={handleLogout}>Logout</button>
+        <button className="btn-danger logout-button" onClick={handleLogout}>
+          Logout
+        </button>
       )}
     </div>
   );

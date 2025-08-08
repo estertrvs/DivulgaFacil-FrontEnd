@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { listarCategorias } from "../../services/categoriaService";
 import ConfirmacaoModal from "../../components/ConfirmacaoModal";
+import "../../styles/Oportunidade.css";
 import {
-  listarOportunidades,
+  filtrarOportunidades,
   criarOportunidade,
   atualizarOportunidade,
   deletarOportunidade,
@@ -27,6 +28,10 @@ function Oportunidade() {
   const [favoritos, setFavoritos] = useState([]);
   const usuarioId = localStorage.getItem("usuarioId"); 
   const tipoUsuario = localStorage.getItem("tipo"); 
+  const [filtroTitulo, setFiltroTitulo] = useState("");
+  const [filtroDataPublicacao, setFiltroDataPublicacao] = useState("");
+  const [filtroDataValidade, setFiltroDataValidade] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("");
 
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("token") !== null;
@@ -45,31 +50,35 @@ function Oportunidade() {
     }
   }, []);
 
-  const carregarOportunidades = () => {
-    listarOportunidades()
-      .then((res) => setOportunidades(res.data))
-      .catch((err) => console.error("Erro ao carregar:", err));
-  };
+  const carregarOportunidades = async () => {
+    try {
+      const filtros = {
+        titulo: filtroTitulo || undefined,
+        dataPublicacao: filtroDataPublicacao || undefined,
+        dataValidade: filtroDataValidade || undefined,
+        categoriaId: filtroCategoria || undefined,
+      };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+      const resOportunidades = await filtrarOportunidades(filtros);
+      const resCategorias = await listarCategorias();
 
-    const dados = { titulo, descricao, dataValidade, categoriaId };
+      const categoriasMap = resCategorias.data.reduce((map, cat) => {
+        map[cat.id] = cat.nome;
+        return map;
+      }, {});
 
-    const acao = editandoId
-      ? atualizarOportunidade(editandoId, dados)
-      : criarOportunidade(dados);
+      const oportunidadesComCategoria = resOportunidades.data.map((o) => ({
+        ...o,
+        categoria: {
+          id: o.categoriaId,
+          nome: categoriasMap[o.categoriaId] || "Desconhecida",
+        },
+      }));
 
-    acao
-      .then(() => {
-        setTitulo("");
-        setDescricao("");
-        setDataValidade("");
-        setCategoriaId("");
-        setEditandoId(null);
-        carregarOportunidades();
-      })
-      .catch((err) => console.error("Erro ao salvar:", err));
+      setOportunidades(oportunidadesComCategoria);
+    } catch (err) {
+      console.error("Erro ao carregar dados filtrados:", err);
+    }
   };
 
   const favoritarOportunidade = (oportunidadeId) => {
@@ -115,60 +124,106 @@ function Oportunidade() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-4">Oportunidades</h1>
+    <div className="container">
 
-      <button
-        onClick={() => navigate("/oportunidades/cadastrar")}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
-        Cadastrar Oportunidade
+      <div className="actions">
+        {tipoUsuario === "ADMIN" && (
+          <button
+            onClick={() => navigate("/oportunidades/cadastrar")}
+            className="btn-primary"
+          >
+            Cadastrar Oportunidade
+          </button>
+        )}
+      </div>
+
+      <h2>Lista de Oportunidades</h2>
+
+      <div className="filtros">
+        <input
+          type="text"
+          placeholder="Filtrar por título"
+          value={filtroTitulo}
+          onChange={(e) => setFiltroTitulo(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Filtrar por publicação"
+          value={filtroDataPublicacao}
+          onChange={(e) => setFiltroDataPublicacao(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Filtrar por validade"
+          value={filtroDataValidade}
+          onChange={(e) => setFiltroDataValidade(e.target.value)}
+        />
+        <select
+          value={filtroCategoria}
+          onChange={(e) => setFiltroCategoria(e.target.value)}
+        >
+          <option value="">Todas as categorias</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.nome}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <button className="btn-primary" onClick={carregarOportunidades}>
+        Buscar
       </button>
 
-      <h2 className="text-xl font-semibold mb-2">Lista de Oportunidades</h2>
+       <button
+        className="btn-secondary"
+        onClick={() => {
+          setFiltroTitulo("");
+          setFiltroDataPublicacao("");
+          setFiltroDataValidade("");
+          setFiltroCategoria("");
+          carregarOportunidades();
+        }}
+      >
+        Limpar
+      </button>
 
-      <table className="min-w-full border rounded overflow-hidden">
-        <thead className="bg-gray-200">
+      <table className="tabela-oportunidades">
+        <thead>
           <tr>
-            <th className="px-4 py-2 border">ID</th>
-            <th className="px-4 py-2 border">Título</th>
-            <th className="px-4 py-2 border">Descrição</th>
-            <th className="px-4 py-2 border">Validade</th>
-            <th className="px-4 py-2 border">Ações</th>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Publicação</th>
+            <th>Validade</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {oportunidades.map((o) => (
-            <tr key={o.id} className="hover:bg-gray-100">
-              <td className="px-4 py-2 border">{o.id}</td>
-              <td className="px-4 py-2 border">{o.titulo}</td>
-              <td className="px-4 py-2 border">{o.descricao}</td>
-              <td className="px-4 py-2 border">
-                {o.dataValidade.split("-").reverse().join("/")}
+            <tr key={o.id}>
+              <td>{o.id}</td>
+              <td>{o.titulo}</td>
+              <td>{o.descricao}</td>
+              <td>{o.categoria?.nome || "Sem categoria"}</td>
+              <td>
+                {new Date(o.dataPublicacao)
+                  .toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
               </td>
-              <td className="px-4 py-2 border space-x-2">
-                {tipoUsuario === "ADMIN" ? (
+              <td>
+                {new Date(o.dataValidade)
+                  .toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
+              </td>
+              <td>
+                {tipoUsuario === "ADM" ? (
                   <>
-                    <button
-                      className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
-                      onClick={() => handleEditar(o.id)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                      onClick={() => setIdParaExcluir(o.id)}
-                    >
-                      Excluir
-                    </button>
+                    <button className="btn-warning" onClick={() => handleEditar(o.id)}>Editar</button>
+                    <button className="btn-danger" onClick={() => setIdParaExcluir(o.id)}>Excluir</button>
                   </>
                 ) : (
                   <button
-                    className={`px-2 py-1 rounded transition ${
-                      favoritos.includes(o.id)
-                        ? "bg-gray-400 hover:bg-gray-500"
-                        : "bg-green-500 hover:bg-green-600"
-                    } text-white`}
+                    className={favoritos.includes(o.id) ? "btn-secondary" : "btn-primary"}
                     onClick={() =>
                       favoritos.includes(o.id)
                         ? desfavoritarOportunidade(o.id)
@@ -183,8 +238,9 @@ function Oportunidade() {
           ))}
         </tbody>
       </table>
-
-      { idParaExcluir !== null && (
+      <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+  
+      {idParaExcluir !== null && (
         <ConfirmacaoModal
           titulo="Confirmar Exclusão"
           mensagem="Deseja realmente excluir esta oportunidade?"
@@ -192,14 +248,9 @@ function Oportunidade() {
           onConfirmar={confirmarExclusao}
         />
       )}
-      <Link
-        to="/"
-        className="mt-6 inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
-      >
-        Voltar
-      </Link>
     </div>
   );
+
 }
 
 export default Oportunidade;

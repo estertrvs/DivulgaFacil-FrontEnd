@@ -75,6 +75,9 @@ const Aluno = () => {
           ))}
         </tbody>
       </table>
+
+      <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+
       { idParaExcluir !== null && (
         <ConfirmacaoModal
           titulo="Confirmar Exclusão"

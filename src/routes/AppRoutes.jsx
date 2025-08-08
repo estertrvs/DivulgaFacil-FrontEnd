@@ -9,7 +9,9 @@ import Categorias from "../pages/categoria/Categoria";
 import CadastrarCategoria from "../pages/categoria/CadastrarCategoria";
 import EditarCategoria from "../pages/categoria/EditarCategoria";
 
-import Usuarios from "../pages/Usuario";
+import Usuarios from "../pages/usuario/Usuario";
+import CadastroUsuario from "../pages/usuario/CadastroUsuario";
+import EditarUsuario from "../pages/usuario/EditarUsuario";
 import Login from "../pages/Login";
 
 import Aluno from "../pages/aluno/Aluno";
@@ -101,6 +103,24 @@ function AppRoutes() {
           element={
             <ProtectedRoute tipoPermitido="ROLE_ADM">
               <Usuarios />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/usuarios/cadastrar"
+          element={
+            <ProtectedRoute tipoPermitido="ROLE_ADM">
+              <CadastroUsuario />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/usuarios/editar/:id"
+          element={
+            <ProtectedRoute tipoPermitido="ROLE_ADM">
+              <EditarUsuario />
             </ProtectedRoute>
           }
         />
