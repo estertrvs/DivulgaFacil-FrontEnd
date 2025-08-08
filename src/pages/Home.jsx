@@ -18,12 +18,18 @@ function Home() {
       <p className="home-subtitle">Bem-vindo ao sistema de divulgação de oportunidades acadêmicas!</p>
 
       <div className="home-buttons">
-        <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
-          Ver Oportunidades
-        </button>
+
+        {isLoggedIn && tipoUsuario === "ALUNO" && (
+          <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
+              Visualizar Oportunidades
+            </button>
+        )}
 
         {isLoggedIn && tipoUsuario !== "ALUNO" && (
           <>
+            <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
+              Gerenciar Oportunidades
+            </button>
             <button className="btn-primary" onClick={() => navigate("/categorias")}>
               Gerenciar Categorias
             </button>
@@ -31,7 +37,7 @@ function Home() {
               Gerenciar Usuários
             </button>
             <button className="btn-primary" onClick={() => navigate("/alunos")}>
-              Ver Alunos
+              Genrenciar Alunos
             </button>
           </>
         )}

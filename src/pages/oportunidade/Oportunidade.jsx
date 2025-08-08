@@ -127,7 +127,7 @@ function Oportunidade() {
     <div className="container">
 
       <div className="actions">
-        {tipoUsuario === "ADMIN" && (
+        {tipoUsuario === "ADM" && (
           <button
             onClick={() => navigate("/oportunidades/cadastrar")}
             className="btn-primary"
