@@ -6,17 +6,17 @@ import FormularioCadastro from "../../components/FormularioCadastro";
 
 function EditarCategoria() {
   const { id } = useParams();
-  const [nome, setNome] = useState("");
-  const navigate = useNavigate();
   const [categoria, setCategoria] = useState({ nome: "" });
+  const [mensagem, setMensagem] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     buscarCategoriaPorId(id)
       .then((res) => setCategoria(res.data))
       .catch((err) => {
         console.error("Erro ao buscar categoria:", err);
-        alert("Erro ao buscar dados da categoria.");
-        navigate("/categorias");
+        setMensagem("Erro ao buscar dados da categoria.");
+        setTimeout(() => navigate("/categorias"), 1500);
       });
   }, [id, navigate]);
 
@@ -28,12 +28,12 @@ function EditarCategoria() {
     e.preventDefault();
     atualizarCategoria(id, categoria)
       .then(() => {
-        alert("Categoria atualizada com sucesso!");
-        navigate("/categorias");
+        setMensagem("Categoria atualizada com sucesso!");
+        setTimeout(() => navigate("/categorias"), 1500);
       })
       .catch((err) => {
         console.error("Erro ao atualizar:", err);
-        alert("Erro ao atualizar a categoria.");
+        setMensagem("Erro ao atualizar a categoria.");
       });
   };
 
@@ -49,14 +49,15 @@ function EditarCategoria() {
   ];
 
   return (
-    <FormularioCadastro
-      titulo="Editar Categoria"
-      campos={campos}
-      onSubmit={handleSubmit}
-      botaoTexto="Salvar Alterações"
-      onVoltar={() => navigate("/categorias")}
-    />
+    <div>
+      {mensagem && <div className={`alert ${mensagem.includes("❌") ? "alert-danger" : ""}`}>{mensagem}</div>}
+      <FormularioCadastro
+        titulo="Editar Categoria"
+        campos={campos}
+        onSubmit={handleSubmit}
+        botaoTexto="Salvar Alterações"
+        onVoltar={() => navigate("/categorias")}
+      />
+    </div>
   );
 }
-
-export default EditarCategoria;
