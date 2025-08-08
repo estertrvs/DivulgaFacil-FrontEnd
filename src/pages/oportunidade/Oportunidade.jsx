@@ -8,6 +8,12 @@ import {
   atualizarOportunidade,
   deletarOportunidade,
 } from "../../services/oportunidadeService";
+import {
+  favoritar,
+  desfavoritar,
+  listarFavoritosDoUsuario,
+} from "../../services/favoritoService";
+
 
 function Oportunidade() {
   const [oportunidades, setOportunidades] = useState([]);
@@ -18,6 +24,9 @@ function Oportunidade() {
   const [editandoId, setEditandoId] = useState(null);
   const [categorias, setCategorias] = useState([]);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
+  const [favoritos, setFavoritos] = useState([]);
+  const usuarioId = localStorage.getItem("usuarioId"); 
+  const tipoUsuario = localStorage.getItem("tipo"); 
 
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("token") !== null;
@@ -28,6 +37,11 @@ function Oportunidade() {
       listarCategorias()
         .then((res) => setCategorias(res.data))
         .catch((err) => console.error("Erro ao carregar categorias:", err));
+      if (tipoUsuario === "ALUNO") {
+        listarFavoritosDoUsuario(usuarioId)
+          .then((res) => setFavoritos(res.data.map((o) => o.id)))
+          .catch((err) => console.error("Erro ao carregar favoritos:", err));
+      }
     }
   }, []);
 
@@ -57,6 +71,21 @@ function Oportunidade() {
       })
       .catch((err) => console.error("Erro ao salvar:", err));
   };
+
+  const favoritarOportunidade = (oportunidadeId) => {
+    favoritar(usuarioId, oportunidadeId)
+      .then(() => setFavoritos([...favoritos, oportunidadeId]))
+      .catch((err) => console.error("Erro ao favoritar:", err));
+  };
+
+  const desfavoritarOportunidade = (oportunidadeId) => {
+     desfavoritar(usuarioId, oportunidadeId)
+    .then(() =>
+      setFavoritos(favoritos.filter((id) => id !== oportunidadeId))
+    )
+    .catch((err) => console.error("Erro ao desfavoritar:", err));
+  };
+
 
   const handleEditar = (id) => {
     navigate(`/oportunidades/editar/${id}`);
@@ -116,18 +145,37 @@ function Oportunidade() {
               <td className="px-4 py-2 border">{o.descricao}</td>
               <td className="px-4 py-2 border">{o.dataValidade}</td>
               <td className="px-4 py-2 border space-x-2">
-                <button
-                  className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
-                  onClick={() => handleEditar(o.id)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                  onClick={() => setIdParaExcluir(o.id)}
-                >
-                  Excluir
-                </button>
+                {tipoUsuario === "ADMIN" ? (
+                  <>
+                    <button
+                      className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
+                      onClick={() => handleEditar(o.id)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                      onClick={() => setIdParaExcluir(o.id)}
+                    >
+                      Excluir
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className={`px-2 py-1 rounded transition ${
+                      favoritos.includes(o.id)
+                        ? "bg-gray-400 hover:bg-gray-500"
+                        : "bg-green-500 hover:bg-green-600"
+                    } text-white`}
+                    onClick={() =>
+                      favoritos.includes(o.id)
+                        ? desfavoritarOportunidade(o.id)
+                        : favoritarOportunidade(o.id)
+                    }
+                  >
+                    {favoritos.includes(o.id) ? "Desfavoritar" : "Favoritar"}
+                  </button>
+                )}
               </td>
             </tr>
           ))}

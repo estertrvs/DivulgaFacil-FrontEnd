@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 import "../styles/Login.css";
 
 function Login() {
@@ -16,7 +17,12 @@ function Login() {
     api.post("/auth/login", { identificador, senha })
       .then((response) => {
         const token = response.data.token;
+        const decoded = jwtDecode(token);
+        const usuarioId = decoded.id;
+        const tipoUsuario = response.data.tipo;
         localStorage.setItem("token", token);
+        localStorage.setItem("usuarioId", usuarioId);
+        localStorage.setItem("tipo", tipoUsuario)
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         login(token);
         navigate("/");
