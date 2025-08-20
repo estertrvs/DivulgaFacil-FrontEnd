@@ -61,3 +61,5 @@ function EditarCategoria() {
     </div>
   );
 }
+
+export default EditarCategoria;
