@@ -6,6 +6,7 @@ import { parseAxiosError } from "../utils/parseAxiosError";
 import authService from "../services/authService";
 import "../styles/Login.css";
 import ConfirmacaoModal from "../components/ConfirmacaoModal";
+import AlertModal from "../components/AlertModal";
 
 function Login() {
   const [identificador, setIdentificador] = useState("");
@@ -13,6 +14,7 @@ function Login() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [alerta, setAlerta] = useState({ mostrar: false, titulo: "", mensagem: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +35,12 @@ function Login() {
 
       if (errorData?.codigo === "USUARIO_NAO_CADASTRADO") {
         setShowModal(true);
-      } else {
-        alert("Falha no login. Verifique seus dados.");
+      } else if (errorData?.codigo === "USUARIO_INVALIDO") {
+        setAlerta({
+          mostrar: true,
+          titulo: "Usuário inválido",
+          mensagem: "Esse usuário não existe no SUAP. Peça para um administrador cadastrar você."
+        });
       }
     }
   };
@@ -50,12 +56,21 @@ function Login() {
       localStorage.setItem("token", token);
       login(token, usuarioId, tipoUsuario);
 
-      alert("Cadastro realizado com sucesso!");
+      setAlerta({
+        mostrar: true,
+        titulo: "Cadastro realizado",
+        mensagem: "Cadastro realizado com sucesso!"
+      });
+
       setShowModal(false);
       navigate("/");
     } catch (error) {
       console.error("Erro ao provisionar usuário:", error);
-      alert("Não foi possível cadastrar o usuário. Tente novamente.");
+      setAlerta({
+        mostrar: true,
+        titulo: "Erro ao cadastrar",
+        mensagem: "Não foi possível cadastrar o usuário. Tente novamente."
+      });
       setShowModal(false);
     }
   };
@@ -84,19 +99,20 @@ function Login() {
         <button type="submit" className="botao-criar">Entrar</button>
       </form>
 
-      <p className="mt-4 text-center">
-        Ainda não tem uma conta?{" "}
-        <Link to="/alunos/cadastrar" className="text-green-700 font-semibold hover:underline">
-          Cadastre-se
-        </Link>
-      </p>
-
       {showModal && (
         <ConfirmacaoModal
           titulo="Usuário não encontrado localmente."
           mensagem="Deseja se cadastrar com os dados do SUAP?"
           onConfirmar={handleProvisionar}
           onCancelar={() => setShowModal(false)}
+        />
+      )}
+
+      {alerta.mostrar && (
+        <AlertModal
+          titulo={alerta.titulo}
+          mensagem={alerta.mensagem}
+          onFechar={() => setAlerta({ ...alerta, mostrar: false })}
         />
       )}
 
