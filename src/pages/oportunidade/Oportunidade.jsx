@@ -29,6 +29,7 @@ function Oportunidade() {
   const [filtroDataPublicacao, setFiltroDataPublicacao] = useState("");
   const [filtroDataValidade, setFiltroDataValidade] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
+  const [filtroFavoritos, setFiltroFavoritos] = useState("TODOS");
 
   const navigate = useNavigate();
 
@@ -165,6 +166,18 @@ function Oportunidade() {
             </option>
           ))}
         </select>
+        {tipoUsuario === "ALUNO" && (
+          <select
+            value={filtroFavoritos}
+            onChange={(e) => setFiltroFavoritos(e.target.value)}
+            className="select-favoritos"
+          >
+            <option value="TODOS">Todas as oportunidades</option>
+            <option value="FAVORITOS">Apenas favoritas</option>
+            <option value="NAO_FAVORITOS">Apenas não favoritas</option>
+          </select>
+        )}
+
       </div>
 
       <button className="btn-primary" onClick={carregarOportunidades}>
@@ -178,6 +191,7 @@ function Oportunidade() {
           setFiltroDataPublicacao("");
           setFiltroDataValidade("");
           setFiltroCategoria("");
+          setFiltroFavoritos("TODOS");
           carregarOportunidades();
         }}
       >
@@ -197,7 +211,14 @@ function Oportunidade() {
           </tr>
         </thead>
         <tbody>
-          {oportunidades.map((o) => (
+          {oportunidades
+            .filter((o) => {
+              if (tipoUsuario !== "ALUNO") return true;
+              if (filtroFavoritos === "FAVORITOS") return favoritos.includes(o.id);
+              if (filtroFavoritos === "NAO_FAVORITOS") return !favoritos.includes(o.id);
+              return true;
+            })
+            .map((o) => (
             <tr key={o.id}>
               <td>{o.id}</td>
               <td>{o.titulo}</td>
