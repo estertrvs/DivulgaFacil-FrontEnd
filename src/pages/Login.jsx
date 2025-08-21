@@ -1,34 +1,63 @@
 import { useState } from "react";
-import api from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import { parseAxiosError } from "../utils/parseAxiosError";
+import authService from "../services/authService";
 import "../styles/Login.css";
+import ConfirmacaoModal from "../components/ConfirmacaoModal";
 
 function Login() {
   const [identificador, setIdentificador] = useState("");
   const [senha, setSenha] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    api.post("/auth/login", { identificador, senha })
-      .then((response) => {
-        const token = response.data.token;
-        const decoded = jwtDecode(token);
-        const usuarioId = decoded.id;
-        const tipoUsuario = response.data.tipo;
-      
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        login(token, usuarioId, tipoUsuario);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Erro no login:", error);
+    try {
+      const response = await authService.login(identificador, senha);
+      const token = response.data.token;
+      const decoded = jwtDecode(token);
+      const usuarioId = decoded.id;
+      const tipoUsuario = response.data.tipo;
+
+      localStorage.setItem("token", token);
+      login(token, usuarioId, tipoUsuario);
+      navigate("/");
+    } catch (error) {
+      const errorData = parseAxiosError(error);
+      console.error("Erro no login:", error);
+
+      if (errorData?.codigo === "USUARIO_NAO_CADASTRADO") {
+        setShowModal(true);
+      } else {
         alert("Falha no login. Verifique seus dados.");
-      });
+      }
+    }
+  };
+
+  const handleProvisionar = async () => {
+    try {
+      const response = await authService.provisionar(identificador, senha);
+      const token = response.data.token;
+      const decoded = jwtDecode(token);
+      const usuarioId = decoded.id;
+      const tipoUsuario = response.data.tipo;
+
+      localStorage.setItem("token", token);
+      login(token, usuarioId, tipoUsuario);
+
+      alert("Cadastro realizado com sucesso!");
+      setShowModal(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao provisionar usuário:", error);
+      alert("Não foi possível cadastrar o usuário. Tente novamente.");
+      setShowModal(false);
+    }
   };
 
   return (
@@ -61,6 +90,16 @@ function Login() {
           Cadastre-se
         </Link>
       </p>
+
+      {showModal && (
+        <ConfirmacaoModal
+          titulo="Usuário não encontrado localmente."
+          mensagem="Deseja se cadastrar com os dados do SUAP?"
+          onConfirmar={handleProvisionar}
+          onCancelar={() => setShowModal(false)}
+        />
+      )}
+
     </div>
   );
 }
