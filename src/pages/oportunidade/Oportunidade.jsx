@@ -203,7 +203,6 @@ function Oportunidade() {
           <tr>
             <th>ID</th>
             <th>Título</th>
-            <th>Descrição</th>
             <th>Categoria</th>
             <th>Publicação</th>
             <th>Validade</th>
@@ -222,7 +221,6 @@ function Oportunidade() {
             <tr key={o.id}>
               <td>{o.id}</td>
               <td>{o.titulo}</td>
-              <td>{o.descricao}</td>
               <td>{o.categoria?.nome || "Sem categoria"}</td>
               <td>
                 {new Date(o.dataPublicacao)
@@ -250,6 +248,12 @@ function Oportunidade() {
                     {favoritos.includes(o.id) ? "Desfavoritar" : "Favoritar"}
                   </button>
                 )}
+                <button
+                  className="btn-info"
+                  onClick={() => navigate(`/oportunidades/detalhes/${o.id}`)}
+                >
+                  Ver detalhes
+                </button>
               </td>
             </tr>
           ))}

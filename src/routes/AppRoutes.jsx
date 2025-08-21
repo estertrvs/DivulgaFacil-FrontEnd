@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Oportunidades from "../pages/oportunidade/Oportunidade";
 import CadastrarOportunidade from "../pages/oportunidade/CadastrarOportunidade";
 import EditarOportunidade from "../pages/oportunidade/EditarOportunidade";
+import DetalhesOportunidade from "../pages/oportunidade/DetalhesOportunidade";
 
 import Categorias from "../pages/categoria/Categoria";
 import CadastrarCategoria from "../pages/categoria/CadastrarCategoria";
@@ -34,6 +35,15 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/oportunidades/detalhes/:id"
+          element={
+            <ProtectedRoute tipoPermitido={["ROLE_ADM", "ROLE_ALUNO"]}>
+              <DetalhesOportunidade />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/oportunidades/cadastrar"
           element={
