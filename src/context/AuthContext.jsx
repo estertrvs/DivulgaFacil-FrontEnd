@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
@@ -7,9 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const usuarioId = localStorage.getItem("usuarioId");
-    const tipo = localStorage.getItem("tipo");
+    const token = Cookies.get("token");
+    const usuarioId = Cookies.get("usuarioId");
+    const tipo = Cookies.get("tipo");
 
     if (token) {
       try {
@@ -28,9 +29,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, usuarioId, tipo) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("usuarioId", usuarioId);
-    localStorage.setItem("tipo", tipo);
+    Cookies.set("token", token, { secure: true, sameSite: "Strict" });
+    Cookies.set("usuarioId", usuarioId, { secure: true, sameSite: "Strict" });
+    Cookies.set("tipo", tipo, { secure: true, sameSite: "Strict" });
 
     const decoded = jwtDecode(token);
     setUsuario({
@@ -42,9 +43,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuarioId");
-    localStorage.removeItem("tipo");
+    Cookies.remove("token");
+    Cookies.remove("usuarioId");
+    Cookies.remove("tipo");
     setUsuario(null);
   };
 

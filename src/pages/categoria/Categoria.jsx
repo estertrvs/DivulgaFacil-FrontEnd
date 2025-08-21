@@ -6,12 +6,13 @@ import {
   listarCategorias,
   deletarCategoria,
 } from "../../services/categoriaService";
+import Cookies from "js-cookie";
 
 function Categoria() {
   const [categorias, setCategorias] = useState([]);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("token") !== null;
+  const isLoggedIn = Cookies.get("token") !== undefined;
 
   useEffect(() => {
     if (isLoggedIn) {

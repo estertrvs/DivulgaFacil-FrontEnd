@@ -7,6 +7,7 @@ import authService from "../services/authService";
 import "../styles/Login.css";
 import ConfirmacaoModal from "../components/ConfirmacaoModal";
 import AlertModal from "../components/AlertModal";
+import Cookies from "js-cookie";
 
 function Login() {
   const [identificador, setIdentificador] = useState("");
@@ -26,7 +27,7 @@ function Login() {
       const usuarioId = decoded.id;
       const tipoUsuario = response.data.tipo;
 
-      localStorage.setItem("token", token);
+      Cookies.set("token", token, { secure: true, sameSite: "Strict" });
       login(token, usuarioId, tipoUsuario);
       navigate("/");
     } catch (error) {
@@ -53,7 +54,7 @@ function Login() {
       const usuarioId = decoded.id;
       const tipoUsuario = response.data.tipo;
 
-      localStorage.setItem("token", token);
+      Cookies.set("token", token, { secure: true, sameSite: "Strict" });
       login(token, usuarioId, tipoUsuario);
 
       setAlerta({

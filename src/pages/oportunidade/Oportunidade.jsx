@@ -14,27 +14,23 @@ import {
   desfavoritar,
   listarFavoritosDoUsuario,
 } from "../../services/favoritoService";
+import Cookies from "js-cookie";
 
 
 function Oportunidade() {
   const [oportunidades, setOportunidades] = useState([]);
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [dataValidade, setDataValidade] = useState("");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [editandoId, setEditandoId] = useState(null);
   const [categorias, setCategorias] = useState([]);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
   const [favoritos, setFavoritos] = useState([]);
-  const usuarioId = localStorage.getItem("usuarioId"); 
-  const tipoUsuario = localStorage.getItem("tipo"); 
+  const usuarioId = Cookies.get("usuarioId");
+  const tipoUsuario = Cookies.get("tipo");
+  const isLoggedIn = Cookies.get("token") !== undefined;
   const [filtroTitulo, setFiltroTitulo] = useState("");
   const [filtroDataPublicacao, setFiltroDataPublicacao] = useState("");
   const [filtroDataValidade, setFiltroDataValidade] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
 
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("token") !== null;
 
   useEffect(() => {
     if (isLoggedIn) {

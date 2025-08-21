@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"; 
+import Cookies from "js-cookie";
 
 function Home() {
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem("token") !== null;
-  const tipoUsuario = localStorage.getItem("tipo");
+  const isLoggedIn = Cookies.get("token") !== undefined;
+  const tipoUsuario = Cookies.get("tipo");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("tipo");
-    navigate("/login");
+    Cookies.remove("token");
+    Cookies.remove("tipo");
+    Cookies.remove("usuarioId");
+    window.location.replace("/login");
   };
 
   return (
