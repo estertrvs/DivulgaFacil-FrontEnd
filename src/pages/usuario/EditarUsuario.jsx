@@ -44,7 +44,7 @@ const EditarUsuario = () => {
       if (errorData?.codigo === "USUARIO_JA_EXISTE") {
         setAlerta({
           mostrar: true,
-          titulo: "Identificador duplicado",
+          titulo: "Informação duplicada",
           mensagem: errorData.mensagem,
         });
       }

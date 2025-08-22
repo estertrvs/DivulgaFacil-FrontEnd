@@ -31,7 +31,7 @@ const CadastrarAluno = () => {
       if (errorData?.codigo === "USUARIO_JA_EXISTE") {
         setAlerta({
           mostrar: true,
-          titulo: "Matrícula duplicada",
+          titulo: "Informação duplicada",
           mensagem: errorData.mensagem,
         });
       }
