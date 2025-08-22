@@ -22,7 +22,7 @@ function DetalhesOportunidade() {
   }
 
   return (
-    <div className="container">
+    <div className="container-detalhes">
       <h2>Detalhes da Oportunidade</h2>
       <div className="detalhes-box">
         <p><strong>ID:</strong> {oportunidade.id}</p>
@@ -32,7 +32,9 @@ function DetalhesOportunidade() {
         <p><strong>Data de Publicação:</strong> {new Date(oportunidade.dataPublicacao).toLocaleDateString('pt-BR')}</p>
         <p><strong>Data de Validade:</strong> {new Date(oportunidade.dataValidade).toLocaleDateString('pt-BR')}</p>
       </div>
-      <button className="botao-voltar" onClick={() => navigate("/oportunidades")}>Voltar</button>
+      <div className="div-invisivel">
+        <button className="botao-voltar" onClick={() => navigate("/oportunidades")}>Voltar</button>
+      </div>
     </div>
   );
 }

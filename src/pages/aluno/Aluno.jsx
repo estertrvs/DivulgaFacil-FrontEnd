@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listarAlunos, deletarAluno } from "../../services/alunoService";
 import { useNavigate } from "react-router-dom";
 import ConfirmacaoModal from "../../components/ConfirmacaoModal";
+import "../../styles/Usuario.css";
 
 const Aluno = () => {
   const [alunos, setAlunos] = useState([]);
@@ -36,15 +37,17 @@ const Aluno = () => {
   }, []);
 
   return (
-    <div className="p-8">
+    <div className="usuarios-container">
       <h2 className="text-2xl font-semibold mb-4">Lista de Alunos</h2>
-      <button
-        onClick={() => navigate("/alunos/cadastrar")}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
-        Cadastrar Novo Aluno
-      </button>
-      <table className="min-w-full border rounded overflow-hidden">
+      <div className="div-invisivel">
+        <button
+          onClick={() => navigate("/alunos/cadastrar")}
+          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        >
+          Cadastrar Novo Aluno
+        </button>
+      </div>
+      <table className="tabela-usuarios">
         <thead className="bg-gray-200">
           <tr>
             <th className="px-4 py-2 border">ID</th>
@@ -75,8 +78,9 @@ const Aluno = () => {
           ))}
         </tbody>
       </table>
-
-      <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+      <div className="div-invisivel">
+        <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+      </div>
 
       { idParaExcluir !== null && (
         <ConfirmacaoModal

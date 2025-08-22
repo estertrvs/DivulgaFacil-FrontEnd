@@ -1,0 +1,80 @@
+.usuarios-container {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border: transparent;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.botao-criar {
+  background-color: #38a169;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.botao-criar:hover {
+  background-color: #2f855a;
+}
+
+.tabela-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tabela-usuarios th,
+.tabela-usuarios td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.tabela-usuarios td:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+}
+
+.tabela-usuarios th {
+  background-color: #edf2f7;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.tabela-usuarios tr:nth-child(even) {
+  background-color: #f7fafc;
+}
+
+.tabela-usuarios tr:hover {
+  background-color: #e2e8f0;
+}
+
+.tabela-usuarios td .px-2 {
+  margin: 0 4px;
+}
+
+.botao-voltar {
+  background-color: #4a5568;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.botao-voltar:hover {
+  background-color: #2d3748;
+}
+
+.div-invisivel {
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 1rem 0;
+}

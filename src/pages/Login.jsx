@@ -77,7 +77,7 @@ function Login() {
   };
 
   return (
-    <div className="formulario-container">
+    <>
       <h2 className="text-2xl font-semibold mb-6 text-green-700 text-center">Login</h2>
 
       <form onSubmit={handleSubmit}>
@@ -117,7 +117,7 @@ function Login() {
         />
       )}
 
-    </div>
+    </>
   );
 }
 

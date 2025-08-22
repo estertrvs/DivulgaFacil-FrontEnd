@@ -49,7 +49,7 @@ function EditarCategoria() {
   ];
 
   return (
-    <div>
+    <div className="categoria-container">
       {mensagem && <div className={`alert ${mensagem.includes("❌") ? "alert-danger" : ""}`}>{mensagem}</div>}
       <FormularioCadastro
         titulo="Editar Categoria"

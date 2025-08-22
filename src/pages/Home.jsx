@@ -15,36 +15,32 @@ function Home() {
   };
 
   return (
-    <div className="container home-container">
+    <div className="home-buttons">
       <h1 className="home-title">DivulgaFácil</h1>
       <p className="home-subtitle">Bem-vindo ao sistema de divulgação de oportunidades acadêmicas!</p>
 
-      <div className="home-buttons">
+      {isLoggedIn && tipoUsuario === "ALUNO" && (
+        <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
+            Visualizar Oportunidades
+          </button>
+      )}
 
-        {isLoggedIn && tipoUsuario === "ALUNO" && (
+      {isLoggedIn && tipoUsuario !== "ALUNO" && (
+        <>
           <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
-              Visualizar Oportunidades
-            </button>
-        )}
-
-        {isLoggedIn && tipoUsuario !== "ALUNO" && (
-          <>
-            <button className="btn-primary" onClick={() => navigate("/oportunidades")}>
-              Gerenciar Oportunidades
-            </button>
-            <button className="btn-primary" onClick={() => navigate("/categorias")}>
-              Gerenciar Categorias
-            </button>
-            <button className="btn-primary" onClick={() => navigate("/usuarios")}>
-              Gerenciar Usuários
-            </button>
-            <button className="btn-primary" onClick={() => navigate("/alunos")}>
-              Genrenciar Alunos
-            </button>
-          </>
-        )}
-      </div>
-
+            Gerenciar Oportunidades
+          </button>
+          <button className="btn-primary" onClick={() => navigate("/categorias")}>
+            Gerenciar Categorias
+          </button>
+          <button className="btn-primary" onClick={() => navigate("/usuarios")}>
+            Gerenciar Usuários
+          </button>
+          <button className="btn-primary" onClick={() => navigate("/alunos")}>
+            Genrenciar Alunos
+          </button>
+        </>
+      )}
       {isLoggedIn && (
         <button className="btn-danger logout-button" onClick={handleLogout}>
           Logout

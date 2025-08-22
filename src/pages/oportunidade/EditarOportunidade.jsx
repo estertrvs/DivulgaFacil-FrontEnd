@@ -106,9 +106,7 @@ function EditarOportunidade() {
   ];
 
   return (
-    <div className="container">
-      <h2>Editar Oportunidade</h2>
-
+    <div className="div-invisivel">
       {mensagem && (
         <div className={`alert alert-${tipoMensagem}`} role="alert">
           {mensagem}

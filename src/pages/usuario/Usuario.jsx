@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { listarUsuarios, deletarUsuario } from "../../services/usuarioService";
 import { useNavigate } from "react-router-dom";
 import ConfirmacaoModal from "../../components/ConfirmacaoModal";
+import "../../styles/Aluno.css";
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -39,11 +40,11 @@ function Usuarios() {
   return (
     <div className="usuarios-container">
       <h2 className="text-2xl font-semibold mb-6 text-green-700 text-center">Usuários</h2>
-
-      <button className="botao-criar" onClick={() => navigate("/usuarios/cadastrar")}>
-        Cadastrar Usuário
-      </button>
-
+      <div className="div-invisivel">
+        <button className="botao-criar" onClick={() => navigate("/usuarios/cadastrar")}>
+          Cadastrar Usuário
+        </button>
+      </div>
       <table className="tabela-usuarios">
         <thead>
           <tr>
@@ -79,8 +80,9 @@ function Usuarios() {
           ))}
         </tbody>
       </table>
-
-      <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+      <div className="div-invisivel">
+        <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
+      </div>
 
       {idParaExcluir !== null && (
         <ConfirmacaoModal

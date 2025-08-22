@@ -121,18 +121,17 @@ function Oportunidade() {
   }
 
   return (
-    <div className="container">
-
-      <div className="actions">
-        {tipoUsuario === "ADM" && (
+    <>
+      {tipoUsuario === "ADM" && (
+        <div className="div-invisivel">
           <button
             onClick={() => navigate("/oportunidades/cadastrar")}
             className="btn-primary"
           >
             Cadastrar Oportunidade
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       <h2>Lista de Oportunidades</h2>
 
@@ -178,25 +177,23 @@ function Oportunidade() {
           </select>
         )}
 
+        <button className="btn-primary" onClick={carregarOportunidades}>
+          Buscar
+        </button>
+        <button
+          className="btn-secondary"
+          onClick={() => {
+            setFiltroTitulo("");
+            setFiltroDataPublicacao("");
+            setFiltroDataValidade("");
+            setFiltroCategoria("");
+            setFiltroFavoritos("TODOS");
+            carregarOportunidades();
+          }}
+        >
+          Limpar
+        </button>
       </div>
-
-      <button className="btn-primary" onClick={carregarOportunidades}>
-        Buscar
-      </button>
-
-       <button
-        className="btn-secondary"
-        onClick={() => {
-          setFiltroTitulo("");
-          setFiltroDataPublicacao("");
-          setFiltroDataValidade("");
-          setFiltroCategoria("");
-          setFiltroFavoritos("TODOS");
-          carregarOportunidades();
-        }}
-      >
-        Limpar
-      </button>
 
       <table className="tabela-oportunidades">
         <thead>
@@ -259,8 +256,16 @@ function Oportunidade() {
           ))}
         </tbody>
       </table>
-      <button type="button" className="botao-voltar" onClick={() => navigate("/")}>Voltar</button>
-  
+      <div className="div-invisivel">
+        <button
+          type="button"
+          className="botao-voltar"
+          onClick={() => navigate("/")}
+        >
+          Voltar
+        </button>
+      </div>
+
       {idParaExcluir !== null && (
         <ConfirmacaoModal
           titulo="Confirmar Exclusão"
@@ -269,7 +274,7 @@ function Oportunidade() {
           onConfirmar={confirmarExclusao}
         />
       )}
-    </div>
+    </>
   );
 
 }

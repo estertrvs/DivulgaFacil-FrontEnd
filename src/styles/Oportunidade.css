@@ -193,3 +193,29 @@ li {
   font-size: 1rem;
 }
 
+.actions {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.div-invisivel {
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.container-detalhes {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: transparent;
+  border: none;
+  font-family: Arial, sans-serif;
+}
+
+
+

@@ -81,7 +81,7 @@ function CadastrarOportunidade() {
   ];
 
   return (
-    <div className="container">
+    <div className="div-invisivel">
       {mensagem && (
         <div className="alert alert-info" role="alert">
           {mensagem}
