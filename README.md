@@ -1,7 +1,7 @@
-
 # 🎯 DivulgaFácil - Frontend
 
-Frontend do sistema **DivulgaFácil**, desenvolvido em **React + Vite**, com integração via **API REST** ao backend. O sistema permite o gerenciamento de oportunidades acadêmicas, categorias e usuários (alunos e administradores).
+Frontend do sistema **DivulgaFácil**, desenvolvido em **React + Vite**.  
+O projeto consome a API REST do backend para oferecer um sistema de **divulgação de oportunidades acadêmicas** (estágios, bolsas, cursos, concursos e eventos externos).
 
 ---
 
@@ -11,15 +11,16 @@ Frontend do sistema **DivulgaFácil**, desenvolvido em **React + Vite**, com int
 - [Vite](https://vitejs.dev/)
 - [Axios](https://axios-http.com/)
 - [React Router Dom](https://reactrouter.com/)
+- Context API (para gerenciamento de autenticação)
 
 ---
 
 ## 🔧 Pré-requisitos
 
-Para rodar o projeto na sua máquina, você precisa ter instalado:
+Para rodar o projeto, instale:
 
-- **[Node.js](https://nodejs.org/)** (versão recomendada LTS)
-- **npm** (já vem com o Node) ou **yarn** (opcional)
+- **[Node.js](https://nodejs.org/)** (versão LTS recomendada)
+- **npm** (vem com o Node) ou **yarn**
 
 ---
 
@@ -45,23 +46,21 @@ npm install
 yarn
 ```
 
-4. **Configure o arquivo da API:**
+4. **Configure o backend no serviço da API:**
 
-No arquivo `src/services/api.js`, verifique se a URL base do backend está correta:
+No arquivo `src/services/api.js`, ajuste a URL do backend se necessário:
 
 ```javascript
 const api = axios.create({
-  baseURL: "http://localhost:8080", 
+  baseURL: "http://localhost:8080", // backend rodando no Spring Boot
 });
 ```
 
-Ajuste a URL conforme a porta e endereço que seu backend está rodando.
-
 ---
 
-## ▶️ Como rodar o projeto
+## ▶️ Rodando o projeto
 
-Execute o comando:
+Execute:
 
 ```bash
 npm run dev
@@ -69,16 +68,15 @@ npm run dev
 yarn dev
 ```
 
-O Vite irá subir um servidor local e você verá algo como:
+O Vite iniciará o servidor local:
 
 ```
 VITE vX.X.X  ready in XXXX ms
 
 ➜  Local:   http://localhost:5173/
-➜  Network: http://192.168.X.XXX:5173/
 ```
 
-Acesse pelo navegador: [http://localhost:5173](http://localhost:5173)
+Acesse: [http://localhost:5173](http://localhost:5173)
 
 ---
 
@@ -86,43 +84,69 @@ Acesse pelo navegador: [http://localhost:5173](http://localhost:5173)
 
 ```
 src
-├── components        # Componentes reutilizáveis (futuramente)
-├── pages             # Páginas da aplicação
-│   ├── Categoria.jsx
-│   ├── Home.jsx
-│   ├── Oportunidade.jsx
-│   └── Usuario.jsx
-├── services          # Arquivos responsáveis por requisições à API
-│   ├── api.js
-│   ├── categoriaService.js
-│   ├── oportunidadeService.js
-│   └── usuarioService.js
-├── App.jsx           # Componente principal
-├── AppRoutes.jsx     # Arquivo de rotas
-├── index.css         # Estilo global
-└── main.jsx          # Arquivo de inicialização
+├── assets/        # Arquivos estáticos (ícones, imagens)
+├── components/    # Componentes reutilizáveis
+├── context/       # Context API (autenticação, usuário logado)
+├── pages/         # Páginas principais da aplicação
+├── routes/        # Definição de rotas e ProtectedRoute
+├── services/      # Comunicação com o backend via Axios
+├── styles/        # Estilização (CSS)
+├── utils/         # Funções auxiliares
+├── App.jsx        # Componente raiz
+├── main.jsx       # Ponto de entrada
 ```
 
 ---
 
 ## 🌐 Rotas da Aplicação
 
-- `/` → Página inicial
-- `/oportunidades` → Gestão de Oportunidades
-- `/categorias` → Gestão de Categorias
-- `/usuarios` → Gestão de Usuários
+- **Públicas:**
+  - `/` → Página inicial
+  - `/login` → Tela de login (autenticação local ou via SUAP)
+
+- **Acesso de Aluno (`ROLE_ALUNO`):**
+  - `/oportunidades` → Listagem de oportunidades
+  - `/oportunidades/detalhes/:id` → Detalhes de uma oportunidade
+  - `/categorias` → Listagem de categorias
+  - `/favoritos` → Favoritos do aluno
+
+- **Acesso de Administrador (`ROLE_ADM`):**
+  - CRUD completo de Oportunidades
+  - CRUD de Categorias
+  - CRUD de Usuários (Alunos e Administradores)
+
+---
+
+## 🔐 Autenticação e Controle de Acesso
+
+A aplicação integra com o backend para autenticação:
+
+- O login pode ser feito:
+  - Usando credenciais **locais** cadastradas no sistema.
+  - Usando credenciais do **SUAP** (usuários provisionados a partir do sistema acadêmico).
+
+- O token JWT retornado pelo backend é salvo no `localStorage` e usado em todas as requisições autenticadas.
+
+- O componente `ProtectedRoute` garante que:
+  - **Alunos (`ROLE_ALUNO`)** tenham acesso somente às rotas de listagem, detalhes e favoritos.
+  - **Administradores (`ROLE_ADM`)** tenham acesso total (CRUD de oportunidades, categorias e usuários).
 
 ---
 
 ## 🚩 Funcionalidades Implementadas
 
-- 🔗 Integração completa com backend (GET e POST)
-- 🧑‍💼 Cadastro de usuários (Aluno ou Administrador) com campos dinâmicos
-- 📑 Cadastro e listagem de oportunidades
-- 🏷️ Cadastro e listagem de categorias
-- 🔗 Navegação entre páginas
+- 🔑 Login com credenciais locais ou via SUAP
+- 🔗 Controle de acesso por tipo de usuário (Aluno/ADM)
+- 📑 Cadastro, listagem, edição e exclusão de oportunidades
+- 🏷️ Gerenciamento de categorias
+- 👥 Gerenciamento de usuários (alunos e administradores)
+- ⭐ Favoritar oportunidades (funcionalidade para alunos)
+- 🚦 Navegação protegida com `ProtectedRoute`
 
-## 👥 Contribuidores
+---
+
+## 👥 Desenvolvedora
+
 <table>
   <tr>
     <td align="center">
@@ -133,33 +157,9 @@ src
         </sub>
       </a>
     </td>
-    <td align="center">
-      <a href="https://github.com/analiciafsoares" title="GitHub">
-        <img src="https://avatars.githubusercontent.com/u/144076062?v=4" width="100px;" alt="Foto de Ana"/><br>
-        <sub>
-          <b>Ana Licia Soares</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Joaopaulomedeirosdesouza" title="GitHub">
-        <img src="https://avatars.githubusercontent.com/u/148402008?v=4" width="100px;" alt="Foto de João Paulo"/><br>
-        <sub>
-          <b>João Paulo Medeiros</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/KesleyWilie" title="GitHub">
-        <img src="https://avatars.githubusercontent.com/u/144160126?v=4" width="100px;" alt="Foto de Kesley"/><br>
-        <sub>
-          <b>Kesley Wilie</b>
-        </sub>
-      </a>
-    </td>
   </tr>
 </table>
 
 ---
 
-**Instituto Federal da Paraíba** - Disciplina de **Desenvolvimento de Aplicações Corporativas**.
+**Instituto Federal da Paraíba**  Disciplina de **Desenvolvimento de Aplicações Corporativas (DAC)**
