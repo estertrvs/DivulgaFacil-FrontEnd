@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { buscarUsuarioPorId, atualizarUsuario } from "../../services/usuarioService";
 import { useNavigate, useParams } from "react-router-dom";
 import FormularioCadastro from "../../components/FormularioCadastro";
+import AlertModal from "../../components/AlertModal";
+import { parseAxiosError } from "../../utils/parseAxiosError";
 
 const EditarUsuario = () => {
   const { id } = useParams();
@@ -13,6 +15,7 @@ const EditarUsuario = () => {
     matricula: "",
     siape: "",
   });
+  const [alerta, setAlerta] = useState({ mostrar: false, titulo: "", mensagem: "" });
 
   useEffect(() => {
     const carregarUsuario = async () => {
@@ -36,7 +39,15 @@ const EditarUsuario = () => {
       await atualizarUsuario(id, usuario);
       navigate("/usuarios");
     } catch (error) {
-      console.error("Erro ao editar usuário:", error);
+      const errorData = parseAxiosError(error);
+      console.error("Erro ao editar aluno:", error);
+      if (errorData?.codigo === "USUARIO_JA_EXISTE") {
+        setAlerta({
+          mostrar: true,
+          titulo: "Identificador duplicado",
+          mensagem: errorData.mensagem,
+        });
+      }
     }
   };
 
@@ -79,13 +90,22 @@ const EditarUsuario = () => {
   ];
 
   return (
-    <FormularioCadastro
-      titulo="Editar Usuário"
-      campos={campos}
-      onSubmit={handleSubmit}
-      botaoTexto="Salvar"
-      onVoltar={() => navigate("/usuarios")}
-    />
+    <>
+      <FormularioCadastro
+        titulo="Editar Usuário"
+        campos={campos}
+        onSubmit={handleSubmit}
+        botaoTexto="Salvar"
+        onVoltar={() => navigate("/usuarios")}
+      />
+        {alerta.mostrar && (
+          <AlertModal
+            titulo={alerta.titulo}
+            mensagem={alerta.mensagem}
+            onFechar={() => setAlerta({ ...alerta, mostrar: false })}
+          />
+        )}
+    </>
   );
 };
 

@@ -3,10 +3,13 @@ import { buscarAlunoPorId, atualizarAluno } from "../../services/alunoService";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/Aluno.css";
 import FormularioCadastro from "../../components/FormularioCadastro";
+import AlertModal from "../../components/AlertModal";
+import { parseAxiosError } from "../../utils/parseAxiosError";
 
 const EditarAluno = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [alerta, setAlerta] = useState({ mostrar: false, titulo: "", mensagem: "" });
   const [aluno, setAluno] = useState({
     nome: "",
     email: "",
@@ -35,7 +38,15 @@ const EditarAluno = () => {
       await atualizarAluno(id, aluno); 
       navigate("/alunos");
     } catch (error) {
+      const errorData = parseAxiosError(error);
       console.error("Erro ao editar aluno:", error);
+      if (errorData?.codigo === "USUARIO_JA_EXISTE") {
+        setAlerta({
+          mostrar: true,
+          titulo: "Matrícula duplicada",
+          mensagem: errorData.mensagem,
+        });
+      }
     }
   };
 
@@ -68,13 +79,22 @@ const EditarAluno = () => {
   ];
 
   return (
-    <FormularioCadastro
-      titulo="Editar Aluno"
-      campos={campos}
-      onSubmit={handleSubmit}
-      botaoTexto="Salvar"
-      onVoltar={() => navigate("/alunos")}
-    />
+    <>
+      <FormularioCadastro
+        titulo="Editar Aluno"
+        campos={campos}
+        onSubmit={handleSubmit}
+        botaoTexto="Salvar"
+        onVoltar={() => navigate("/alunos")}
+      />
+      {alerta.mostrar && (
+        <AlertModal
+          titulo={alerta.titulo}
+          mensagem={alerta.mensagem}
+          onFechar={() => setAlerta({ ...alerta, mostrar: false })}
+        />
+      )}
+    </>
   );
 
 };

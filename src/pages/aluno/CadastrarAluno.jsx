@@ -3,9 +3,12 @@ import { cadastrarAluno } from "../../services/alunoService";
 import { useNavigate } from "react-router-dom";
 import FormularioCadastro from "../../components/FormularioCadastro";
 import "../../styles/Aluno.css";
+import AlertModal from "../../components/AlertModal";
+import { parseAxiosError } from "../../utils/parseAxiosError";
 
 const CadastrarAluno = () => {
   const navigate = useNavigate();
+  const [alerta, setAlerta] = useState({ mostrar: false, titulo: "", mensagem: "" });
   const [aluno, setAluno] = useState({
     nome: "",
     email: "",
@@ -23,7 +26,15 @@ const CadastrarAluno = () => {
       await cadastrarAluno(aluno);
       navigate("/alunos");
     } catch (error) {
+      const errorData = parseAxiosError(error);
       console.error("Erro ao cadastrar aluno:", error);
+      if (errorData?.codigo === "USUARIO_JA_EXISTE") {
+        setAlerta({
+          mostrar: true,
+          titulo: "Matrícula duplicada",
+          mensagem: errorData.mensagem,
+        });
+      }
     }
   };
 
@@ -63,16 +74,25 @@ const CadastrarAluno = () => {
       required: true 
     }
   ];
-
   return (
-     <FormularioCadastro
-      titulo="Cadastrar Aluno"
-      campos={campos}
-      onSubmit={handleSubmit}
-      botaoTexto="Cadastrar"
-      onVoltar={() => navigate("/alunos")}
-    />
+    <>
+      <FormularioCadastro
+        titulo="Cadastrar Aluno"
+        campos={campos}
+        onSubmit={handleSubmit}
+        botaoTexto="Cadastrar"
+        onVoltar={() => navigate("/alunos")}
+      />
+      {alerta.mostrar && (
+        <AlertModal
+          titulo={alerta.titulo}
+          mensagem={alerta.mensagem}
+          onFechar={() => setAlerta({ ...alerta, mostrar: false })}
+        />
+      )}
+    </>
   );
+
 };
 
 export default CadastrarAluno;

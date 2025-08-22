@@ -2,6 +2,8 @@ import { useState } from "react";
 import { criarUsuario } from "../../services/usuarioService";
 import { useNavigate } from "react-router-dom";
 import FormularioCadastro from "../../components/FormularioCadastro";
+import AlertModal from "../../components/AlertModal";
+import { parseAxiosError } from "../../utils/parseAxiosError";
 
 function CadastroUsuario() {
   const [nome, setNome] = useState("");
@@ -11,6 +13,7 @@ function CadastroUsuario() {
   const [matricula, setMatricula] = useState("");
   const [siape, setSiape] = useState("");
   const navigate = useNavigate();
+  const [alerta, setAlerta] = useState({ mostrar: false, titulo: "", mensagem: "" });
 
   const campos = [
     { name: "nome", label: "Nome", value: nome, onChange: (e) => setNome(e.target.value), required: true },
@@ -49,18 +52,35 @@ function CadastroUsuario() {
     criarUsuario(novoUsuario)
       .then(() => navigate("/usuarios"))
       .catch((error) => {
-        console.error("Erro ao criar usuário:", error);
+        const errorData = parseAxiosError(error);
+        console.error("Erro ao cadastrar usuário:", error);
+        if (errorData?.codigo === "USUARIO_JA_EXISTE") {
+          setAlerta({
+            mostrar: true,
+            titulo: "Identificador duplicado",
+            mensagem: errorData.mensagem,
+          });
+        }
       });
   };
 
   return (
-    <FormularioCadastro
-      campos={campos}
-      onSubmit={handleSubmit}
-      titulo="Cadastro de Usuário"
-      botaoTexto="Cadastrar"
-      onVoltar={() => navigate("/usuarios")}
-    />
+    <>
+      <FormularioCadastro
+        campos={campos}
+        onSubmit={handleSubmit}
+        titulo="Cadastro de Usuário"
+        botaoTexto="Cadastrar"
+        onVoltar={() => navigate("/usuarios")}
+      />
+      {alerta.mostrar && (
+        <AlertModal
+          titulo={alerta.titulo}
+          mensagem={alerta.mensagem}
+          onFechar={() => setAlerta({ ...alerta, mostrar: false })}
+        />
+      )}
+    </>
   );
 }
 
